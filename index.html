@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carta para ti 💌</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Patrick Hand', cursive;
+      background-color: #fdeff2;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #container {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      cursor: pointer;
+      z-index: 10;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    .envelope {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #ffb6c1;
+      border: 2px solid #e75480;
+      clip-path: polygon(0 0, 100% 0, 100% 60%, 0 60%);
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: white;
+      font-weight: bold;
+      animation: bounce 2s infinite;
+    }
+
+    .envelope::after {
+      content: "Ábrelo 😋";
+    }
+
+    .flap {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #ffb6c1;
+      clip-path: polygon(0 0, 100% 0, 50% 50%);
+      z-index: 3;
+      transform-origin: top;
+      transition: transform 1s ease;
+    }
+
+    .carta, .regalo2 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      width: 100vw;
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease, background-image 1s ease;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    .visible {
+      display: flex !important;
+      opacity: 1 !important;
+    }
+
+    .mensaje p {
+      font-size: 22px;
+      margin: 10px 0;
+      animation: slideIn 0.8s ease forwards;
+    }
+
+    .botones {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 15px;
+      font-size: 18px;
+      background: #ff69b4;
+      color: white;
+      cursor: pointer;
+      font-family: 'Patrick Hand', cursive;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      background: #ff1493;
+      transform: scale(1.05);
+    }
+
+    .confirmacion {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff0f5;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      display: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 50;
+      color: #333;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .confirmacion button {
+      margin: 10px;
+    }
+
+    .regalo2 h2 {
+      text-shadow: 1px 1px 4px black;
+      animation: slideIn 1s ease forwards;
+    }
+
+    .regalo2 audio {
+      display: none;
+    }
+
+    .controles {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sobre -->
+<div id="container" onclick="abrirCarta()">
+  <div class="envelope"></div>
+  <div class="flap"></div>
+</div>
+
+<!-- Carta -->
+<div class="carta" id="carta" style="background-image: url('fondo1.jpg');">
+  <div class="mensaje">
+    <p>🌸 No tengo flores, pero tengo palabras... y muchas ganas de hacerte sonreír.</p>
+    <p>✨ Eres esa persona que apareció sin avisar y terminó siendo mi lugar favorito.</p>
+    <p>💘 Hoy es tu día, y solo quiero recordarte que tenerte es mi mayor suerte.</p>
+    <p>😌 Gracias por aguantarme, por tus risas, tus regaños suaves y tu cariño raro pero bonito.</p>
+    <p>📝 Esto no es un poema, pero espero que al menos te saque una sonrisita tierna.</p>
+  </div>
+  <div class="botones">
+    <button class="btn" onclick="mostrarConfirmacion()">🎁 Regalito 1</button>
+    <button class="btn" onclick="abrirRegalo2()">🎁 Regalito 2</button>
+  </div>
+</div>
+
+<!-- Confirmación PDF -->
+<div class="confirmacion" id="confirmacion">
+  <p>¿Quieres descargar este pequeño PDF?</p>
+  <button class="btn" onclick="descargarPDF()">Sí 🥺</button>
+  <button class="btn" onclick="cerrarConfirmacion()">No gracias</button>
+</div>
+
+<!-- Regalo 2 -->
+<div class="regalo2" id="regalo2" style="background-image: url('fondo1.jpg');">
+  <h2>🎶 Disfruta tu regalito 🎶</h2>
+  <audio id="audio" autoplay>
+    <source id="audioSource" src="cancion1.mp3" type="audio/mp3">
+    Tu navegador no soporta audio.
+  </audio>
+  <div class="controles">
+    <button class="btn" onclick="volverCarta()">⬅ Volver</button>
+    <button class="btn" onclick="cambiarFondo()">🖼️ Cambiar fondo</button>
+    <button class="btn" onclick="cambiarCancion()">🎵 Cambiar canción</button>
+  </div>
+</div>
+
+<script>
+  const fondos = ['fondo1.jpg', 'fondo2.jpg', 'fondo3.jpg'];
+  const canciones = ['cancion1.mp3', 'cancion2.mp3', 'cancion3.mp3'];
+  let fondoIndex = 0;
+  let cancionIndex = 0;
+
+  function abrirCarta() {
+    document.querySelector('.flap').style.transform = "rotateX(-180deg)";
+    setTimeout(() => {
+      document.getElementById('container').style.display = 'none';
+      const carta = document.getElementById('carta');
+      carta.classList.add('visible');
+    }, 1000);
+  }
+
+  function mostrarConfirmacion() {
+    document.getElementById('confirmacion').style.display = 'block';
+  }
+
+  function cerrarConfirmacion() {
+    document.getElementById('confirmacion').style.display = 'none';
+  }
+
+  function descargarPDF() {
+    const link = document.createElement('a');
+    link.href = 'cartita.pdf';
+    link.setAttribute('download', 'Carta_para_ti.pdf');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    cerrarConfirmacion();
+  }
+
+  function abrirRegalo2() {
+    const carta = document.getElementById('carta');
+    const regalo2 = document.getElementById('regalo2');
+
+    carta.classList.remove('visible');
+    setTimeout(() => {
+      carta.style.display = 'none';
+      regalo2.classList.add('visible');
+      reproducirCancion();
+    }, 1000);
+  }
+
+  function volverCarta() {
+    const carta = document.getElementById('carta');
+    const regalo2 = document.getElementById('regalo2');
+
+    regalo2.classList.remove('visible');
+    setTimeout(() => {
+      regalo2.style.display = 'none';
+      carta.classList.add('visible');
+    }, 1000);
+  }
+
+  function cambiarFondo() {
+    fondoIndex = (fondoIndex + 1) % fondos.length;
+    document.getElementById('regalo2').style.backgroundImage = `url('${fondos[fondoIndex]}')`;
+  }
+
+  function cambiarCancion() {
+    cancionIndex = (cancionIndex + 1) % canciones.length;
+    reproducirCancion();
+  }
+
+  function reproducirCancion() {
+    const audio = document.getElementById('audio');
+    const source = document.getElementById('audioSource');
+    audio.pause();
+    source.src = canciones[cancionIndex];
+    audio.load();
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        console.log("Reproducción bloqueada por el navegador.");
+      });
+    }
+  }
+</script>
+
+</body>
+</html>
